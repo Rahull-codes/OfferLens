@@ -1,7 +1,8 @@
 import axios from 'axios';
+import API_URL from '../../../lib/apiBase';
 
 const api = axios.create({
-    baseURL: 'https://offerlens-backend-gb2s.onrender.com/api/auth',
+    baseURL: `${API_URL}/api/auth`,
     withCredentials: true
 });
 
@@ -17,7 +18,6 @@ export async function login({ email, password }) {
     const response = await api.post(`/login`, {
         email, password
     });
-
     return response.data;
 }
 

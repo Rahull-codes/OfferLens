@@ -1,7 +1,8 @@
 import axios from 'axios'
+import API_URL from '../../../lib/apiBase'
 
 const api = axios.create({
-    baseURL: 'https://offerlens-backend-gb2s.onrender.com',
+    baseURL: API_URL,
     withCredentials: true
 });
 
