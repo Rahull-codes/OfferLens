@@ -7,7 +7,7 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://offer-lens-lime.vercel.app',
     credentials: true,
 }));
 
