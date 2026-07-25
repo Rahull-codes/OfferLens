@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://offerlens-backend-gb2s.onrender.com',
+    baseURL: 'https://offerlens-backend-gb2s.onrender.com/api/auth',
     withCredentials: true
 });
 
