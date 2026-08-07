@@ -1,213 +1,253 @@
-# 🚀 OfferLens
+# OfferLens
 
-> AI-powered Resume Analyzer that compares your Resume, Job Description, and Self Description to generate personalized interview insights, ATS feedback, skill gap analysis, and resume improvement suggestions.
+AI-powered interview prep platform. Upload a resume and job description to get:
 
-![License](https://img.shields.io/badge/License-MIT-green)
-![Next.js](https://img.shields.io/badge/Next.js-15-black)
-![React](https://img.shields.io/badge/React-19-61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-4-38BDF8)
-
----
-
-## 📌 Overview
-
-Applying for jobs can be overwhelming.
-
-**OfferLens** helps job seekers understand how well their resume matches a specific job description using AI. Simply upload your resume, paste the job description, add a short self-description, and receive detailed feedback to improve your chances of getting shortlisted.
+- Match score vs the role
+- Technical & behavioral interview questions with model answers
+- Skill-gap analysis
+- Day-by-day preparation roadmap
+- Optimized resume PDF download
 
 ---
 
-## ✨ Features
+## Tech Stack
 
-- 📄 Upload Resume (PDF)
-- 💼 Analyze Job Description
-- 👤 Add Self Description
-- 🤖 AI-Powered Resume Review
-- 🎯 ATS Match Analysis
-- 📊 Match Score
-- 🧠 Skill Gap Detection
-- 💡 Resume Improvement Suggestions
-- 🎤 Interview Preparation Tips
-- 📝 AI Generated Professional Summary
-- ⚡ Fast & Responsive UI
+| Layer | Stack |
+|---|---|
+| **Frontend** | React 18, Vite, React Router, Axios, Sass, React Toastify |
+| **Backend** | Node.js, Express 5, MongoDB (Mongoose), JWT, Multer |
+| **AI** | Google Gemini (`@google/genai`) |
+| **PDF** | `pdf-parse` (resume text extract), Puppeteer (optimized resume PDF) |
 
 ---
 
-## 🖥️ Demo
-
-> Coming Soon
-
----
-
-## 📸 Screenshots
-
-Add screenshots here.
-
-```
-/screenshots
-    home.png
-    upload.png
-    analysis.png
-    result.png
-```
-
----
-
-## 🛠 Tech Stack
-
-### Frontend
-
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-
-### Backend
-
-- Next.js API Routes
-- AI Integration
-
-### AI
-
-- LLM API
-- Prompt Engineering
-
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```
 OfferLens/
+├── Backend/                 # Express API
+│   ├── server.js            # Entry point
+│   ├── .env.example
+│   └── src/
+│       ├── app.js
+│       ├── Controller/
+│       ├── Middlewares/
+│       ├── model/
+│       ├── Routes/
+│       ├── config/
+│       └── services/        # Gemini + PDF generation
 │
-├── app/
-├── components/
-├── lib/
-├── public/
-├── styles/
-├── hooks/
-├── types/
-├── utils/
-├── package.json
-└── README.md
+└── Frontend/                # React + Vite SPA
+    ├── .env.example
+    ├── vercel.json          # SPA rewrites for Vercel
+    └── src/
+        ├── features/
+        │   ├── auth/        # Login, register, protected routes
+        │   └── interview/   # Home form, report UI, history
+        ├── lib/             # API base URL helpers
+        └── styles/
 ```
 
 ---
 
-## ⚙️ Installation
+## Features
 
-Clone the repository
+- **Auth** — Register / login with JWT (Bearer token + cookies)
+- **Interview report generation** — Resume PDF + job description → AI report
+- **Chat history** — Browse past reports from the home sidebar
+- **Interview dashboard** — Technical / Behavioral / Road Map sections
+- **Optimized resume** — Generate and download a role-tailored PDF
+
+---
+
+## Prerequisites
+
+- Node.js 18+
+- MongoDB Atlas (or local MongoDB)
+- Google AI / Gemini API key
+
+---
+
+## Setup
+
+### 1. Clone
 
 ```bash
 git clone https://github.com/Rahull-codes/OfferLens.git
-```
-
-Go into the project directory
-
-```bash
 cd OfferLens
 ```
 
-Install dependencies
+### 2. Backend
 
 ```bash
+cd Backend
+cp .env.example .env
 npm install
 ```
 
-Create a `.env.local`
+Edit `Backend/.env`:
 
 ```env
-AI_API_KEY=your_api_key
+PORT=3000
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+GOOGLE_API_KEY=your_google_api_key
+CLIENT_URL=http://localhost:5173
+NODE_ENV=development
 ```
 
-Run the development server
+Start the API:
 
 ```bash
 npm run dev
 ```
 
-Visit
+Server runs at `http://localhost:3000`.
 
-```
-http://localhost:3000
-```
-
----
-
-## 🚀 How It Works
-
-1. Upload your Resume
-2. Paste the Job Description
-3. Add a Self Description
-4. Click **Analyze**
-5. AI processes all three inputs
-6. Receive:
-
-- ATS Match Score
-- Resume Analysis
-- Missing Skills
-- Strengths
-- Weaknesses
-- Resume Suggestions
-- Interview Preparation Tips
-
----
-
-## 📈 Future Improvements
-
-- Authentication
-- Resume History
-- Export PDF Report
-- Cover Letter Generator
-- LinkedIn Profile Analyzer
-- Multiple Resume Support
-- AI Chat Assistant
-- Company Specific Interview Questions
-- Resume Version Comparison
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!
-
-1. Fork the repository
-2. Create your feature branch
+### 3. Frontend
 
 ```bash
-git checkout -b feature/new-feature
+cd Frontend
+cp .env.example .env
+npm install
 ```
 
-3. Commit your changes
+Edit `Frontend/.env`:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+Start the app:
 
 ```bash
-git commit -m "Add new feature"
+npm run dev
 ```
 
-4. Push
+App runs at `http://localhost:5173`.
 
-```bash
-git push origin feature/new-feature
+---
+
+## API Overview
+
+### Auth — `/api/auth`
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/register` | Public | Create account |
+| `POST` | `/login` | Public | Login (returns JWT) |
+| `GET` | `/logout` | Public | Logout / blacklist token |
+| `GET` | `/get-me` | Private | Current user |
+
+### Interview — `/api/interview`
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/` | Private | Generate report (`multipart`: `resume`, `jobDescription`, `selfDescription`) |
+| `GET` | `/` | Private | List user's reports |
+| `GET` | `/report/:interviewId` | Private | Get one report |
+| `POST` | `/resume/pdf/:interviewId` | Private | Download optimized resume PDF |
+
+Private routes accept:
+
+- `Authorization: Bearer <token>`, or
+- `token` cookie (with credentials)
+
+---
+
+## Frontend Routes
+
+| Path | Access | Page |
+|---|---|---|
+| `/login` | Public | Login |
+| `/register` | Public | Register |
+| `/` | Protected | Home — upload resume & generate report |
+| `/interview/:interviewId` | Protected | Interview report dashboard |
+
+---
+
+## Environment Variables
+
+### Backend
+
+| Variable | Description |
+|---|---|
+| `PORT` | API port (default `3000`) |
+| `MONGO_URI` | MongoDB connection string |
+| `JWT_SECRET` | Secret for signing JWTs |
+| `GOOGLE_API_KEY` | Gemini API key |
+| `CLIENT_URL` | Frontend origin for CORS (e.g. Vercel URL) |
+| `NODE_ENV` | `development` or `production` |
+
+### Frontend
+
+| Variable | Description |
+|---|---|
+| `VITE_API_URL` | Backend base URL (no trailing slash) |
+
+---
+
+## Deployment
+
+### Backend (Render)
+
+| Setting | Value |
+|---|---|
+| Root Directory | `Backend` |
+| Build Command | `npm install` |
+| Start Command | `node server.js` |
+
+Set env vars from the Backend table above. Use:
+
+```env
+CLIENT_URL=https://your-frontend.vercel.app
+NODE_ENV=production
 ```
 
-5. Open a Pull Request
+In MongoDB Atlas → Network Access, allow `0.0.0.0/0` (or Render IPs).
+
+### Frontend (Vercel)
+
+| Setting | Value |
+|---|---|
+| Root Directory | `Frontend` |
+| Framework | Vite |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+
+Set:
+
+```env
+VITE_API_URL=https://your-backend.onrender.com
+```
+
+`vercel.json` already rewrites SPA routes so `/login` etc. work on refresh.
 
 ---
 
-## ⭐ Show Your Support
+## Usage Flow
 
-If you found this project useful, consider giving it a ⭐ on GitHub.
+1. Register / log in
+2. On Home, paste a **job description**, add an optional **self description**, upload a **resume PDF**
+3. Click **Generate Interview Report**
+4. Open the report dashboard:
+   - Technical & behavioral Q&A (multi-open accordion)
+   - Preparation roadmap
+   - Match score & skill gaps
+5. Download **Optimized Resume** from the left sidebar
+6. Reopen past reports from **Chat History**
 
 ---
 
-## 👨‍💻 Author
+## Notes
 
-**Rahul Sahu**
-
-GitHub: https://github.com/Rahull-codes
+- Resume upload limit is **3MB** (PDF only)
+- Cross-origin auth uses **Bearer tokens** (stored in `localStorage`) so Vercel ↔ Render works reliably
+- Puppeteer on free Render may need extra Chromium setup for resume PDF generation
+- Never commit real `.env` files — use `.env.example` as a template
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License.
+ISC
